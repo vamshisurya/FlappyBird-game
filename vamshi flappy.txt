@@ -1,0 +1,84 @@
+import random       #for generating random numbers 
+import sys
+from pip import main          #we will use sys.exit to exit the programme
+import pygame
+from pygame.locals import *
+
+#Global variables for the game
+FPS = 32   #frames per second that render per second
+SCREENWIDTH = 289
+SCREENHEIGHT = 511
+SCREEN = pygame.display.set_mode((SCREENWIDTH,SCREENHEIGHT))   #Initialize a window or screen for display
+GROUNDY = SCREENHEIGHT * 0.8
+GAME_SPRITES = {}
+GAME_SOUNDS = {}
+PLAYER = 'C:\\Users\vamshi\OneDrive\Desktop\\flappybird\\gallery\\sprites\\bird'
+BACKGROUND = 'C:\\Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\background'
+PIPE = 'C:\\Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\pipe'
+
+def welcomeScreen():
+    """shows welcome images on the screen"""
+
+    playerx = int(SCREENWIDTH/5)
+    playery = int(SCREENHEIGHT - GAME_SPRITES['player'].get_height())/2
+    messagex = int((SCREENHEIGHT - GAME_SPRITES['message'].get_width()))/2
+    messagey = int(SCREENHEIGHT*0.13)
+    basex = 0
+    while True:
+        for event in pygame.event.get():
+            #if user clicks on cross button, close the game
+            if event.type == QUIT or (event.type == KEYDOWN or event.key == K_ESCAPE):
+                pygame.quit()
+                sys.exit()
+        #if user press space or up arrow keys start the game
+            elif event.type == KEYDOWN and (event.type == K_SPACE or event.key == K_UP):
+                return
+            
+            else:
+                SCREEN.blit(GAME_SPRITES['background'],(0, 0))
+                SCREEN.blit(GAME_SPRITES['player'],(playerx, playery))
+                SCREEN.blit(GAME_SPRITES['message'],(messagex, messagey))
+                SCREEN.blit(GAME_SPRITES['base'],(basex, basey))    
+                pygame.display.update()
+                FPSCLOCK.tick(FPS)
+            
+        
+
+
+if __name__ == "__main__":
+    pygame.init()
+    FPSCLOCK = pygame.time.Clock() #Creates Clock object to track amount of time & also provides several functions to help control a game's framerate.
+    pygame.display.set_caption('Flappy Bird with vamshi surya')
+    GAME_SPRITES['numbers'] = ( 
+        pygame.image.load('Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\0').convert_alpha(),
+        pygame.image.load('Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\1').convert_alpha(),
+        pygame.image.load('Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\2').convert_alpha(),
+        pygame.image.load('Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\3').convert_alpha(),
+        pygame.image.load('Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\4').convert_alpha(),
+        pygame.image.load('Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\5').convert_alpha(),
+        pygame.image.load('Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\6').convert_alpha(),
+        pygame.image.load('Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\7').convert_alpha(),
+        pygame.image.load('Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\8').convert_alpha(),
+        pygame.image.load('Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\9').convert_alpha(),
+        )
+    GAME_SPRITES['message'] = pygame.image.load('C:\\Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\message').convert_alpha()
+    GAME_SPRITES['base'] = pygame.image.load('C:\\Users\\vamshi\\OneDrive\\Desktop\\flappybird\\gallery\\sprites\\base').convert_alpha()
+    GAME_SPRITES['pipe'] = (
+    pygame.transform.rotate(pygame.image.load(PIPE).convert_alpha(), 180),
+    pygame.image.load(PIPE).convert_alpha()
+    )   #tuple for straight pipe and 180degree reverse pipe
+
+    #Game Sounds
+    GAME_SOUNDS['die'] = pygame.mixer.Sound('gallery/audio/die.wav')
+    GAME_SOUNDS['hit'] = pygame.mixer.Sound('gallery/audio/hit.wav')
+    GAME_SOUNDS['swoosh'] = pygame.mixer.Sound('gallery/audio/swoosh.wav')
+    GAME_SOUNDS['wing'] = pygame.mixer.Sound('gallery/audio/wing.wav')
+    GAME_SOUNDS['point'] = pygame.mixer.Sound('gallery/audio/point.wav')
+
+    GAME_SPRITES['background'] = pygame.image.load(BACKGROUND).convert()
+    GAME_SPRITES['player'] = pygame.image.load(PLAYER).convert_alpha()
+
+    while True:
+        welcomeScreen() #Shows welcome screen to the user until he presses a button
+        mainGame()  #this is the main function
+        
